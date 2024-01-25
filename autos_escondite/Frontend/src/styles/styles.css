@@ -1,3 +1,7 @@
+/* html, body {
+  height: 100%;
+  margin: 0;
+} */
 /* Add this to your CSS file or style tag */
 .suggestions-container {
     position: relative;
@@ -8,7 +12,9 @@
     z-index: -5;
   }
 /* Add these styles to your existing styles.css or create a new CSS file */
-
+#footer a {
+  color: #A0A0A0;
+}
 .navbar {
     background-color: #f8f9fa; /* Add your desired background color */
   }
@@ -32,6 +38,9 @@
   
   .nav-item {
     margin-right: 15px; /* Adjust the spacing between nav items */
+  }
+  a {
+    text-decoration: none;
   }
   
   /* Add any additional styling as needed */

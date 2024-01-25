@@ -4,30 +4,19 @@ import Card from 'react-bootstrap/Card';
 import img from "../content/images/download.jpeg";
 
 
-const FeaturedCars=()=>{
+const FeaturedCars=(props)=>{
     return(
-        <div style={{display:"inline-block"}}>
-        <Card style={{ width: '18rem' }}>
+      <Card>
       <Card.Img variant="botttom" src={img} />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
+        <Card.Title>{props.brand}</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+          Starting from
+          <h4>Rs {props.price}</h4>
         </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <a href="#">Explore</a>
       </Card.Body>
     </Card>
-        </div>
     );
 }
 export default FeaturedCars;
-
-
-// function BasicExample() {
-//   return (
-    
-//   );
-// }
-
-// export default BasicExample;

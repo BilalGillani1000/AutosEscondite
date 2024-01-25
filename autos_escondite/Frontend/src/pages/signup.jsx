@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import img from "../content/images/download.jpeg";
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
   return (
@@ -29,7 +30,7 @@ const SignUp = () => {
               Sign Up
             </Button>
           </Form>
-          <a href='/'>Already have an account?Sign In</a>
+          <Link to="/signin">Already have an account?Sign In</Link>
         </Col>
       </Row>
     </Container>
