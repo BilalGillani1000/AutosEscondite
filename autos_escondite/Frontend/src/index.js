@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './pages/home';
-import Signin from './pages/signin';
-import SignUp from './pages/signup';
-import CarForm from './pages/uploadCar';
-import ImageUpload from './pages/uploadImage';
+// import Home from './pages/home';
+// import Signin from './pages/signin';
+// import SignUp from './pages/signup';
+// import CarForm from './pages/uploadCar';
+// import ImageUpload from './pages/uploadImage';
+import App from './app';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -15,6 +16,7 @@ root.render(
     {/* <Signin /> */}
     {/* <SignUp /> */}
     {/* <CarForm /> */}
-    <ImageUpload />
+    {/* <ImageUpload /> */}
+    <App />
   </React.StrictMode>,
 );

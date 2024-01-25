@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-const CarForm = () => {
+const UploadCar = () => {
   // State to store selected values
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
@@ -122,4 +122,4 @@ const CarForm = () => {
   );
 };
 
-export default CarForm;
+export default UploadCar;

@@ -56,10 +56,9 @@ class Trie {
   }
 }
 
-const IdealCar = () => {
+const Test = () => {
   const [brandInput, setBrandInput] = useState('');
   const [modelInput, setModelInput] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
   const [brandSuggestions, setBrandSuggestions] = useState([]);
   const [modelSuggestions, setModelSuggestions] = useState([]);
   const brandTrie = new Trie();
@@ -105,15 +104,13 @@ const IdealCar = () => {
     // Process the form submission or update state as needed
     console.log('Selected Car Brand:', brandInput);
     console.log('Selected Car Model:', modelInput);
-    console.log("Selected Year:", selectedYear);
   };
 
   return (
-    <Container className="mt-5 mb-5">
+    <Container>
       <Form onSubmit={handleSubmit}>
-        <Row className="justify-content-center">
-          <h2 className="text-center">Search for Your Ideal Car</h2>
-          <Col md={"3"}>
+        <Row>
+          <Col>
             <Form.Group controlId="carBrand">
               <Form.Label>Car Brand</Form.Label>
               <Form.Control
@@ -136,7 +133,7 @@ const IdealCar = () => {
               </div>
             </Form.Group>
           </Col>
-          <Col md={"3"}>
+          <Col>
             <Form.Group controlId="carModel">
               <Form.Label>Car Model</Form.Label>
               <Form.Control
@@ -159,21 +156,13 @@ const IdealCar = () => {
               </div>
             </Form.Group>
           </Col>
-          <Col md={"3"}>
-            <Form.Group controlId="carSeats">
-              <Form.Label>Year</Form.Label>
-              <Form.Control type="number" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} placeholder="Manufacturing year" />
-            </Form.Group>
-          </Col>
-          <Col md={"1"}>
-            <Button style={{marginTop:"30px"}} variant="primary" type="submit" size='md'>
-              Search
-            </Button>
-          </Col>
         </Row>
-        
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
       </Form>
     </Container>
   );
 };
-export default IdealCar;
+
+export default Test;

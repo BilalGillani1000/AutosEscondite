@@ -1,18 +1,51 @@
-/* Add your custom styles for suggestions */
+/* Add this to your CSS file or style tag */
 .suggestions-container {
     position: relative;
+    z-index: 0;
   }
+  .herosection {
+    position: relative;
+    z-index: -5;
+  }
+/* Add these styles to your existing styles.css or create a new CSS file */
+
+.navbar {
+    background-color: #f8f9fa; /* Add your desired background color */
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Adjust the column widths as needed */
+    align-items: center;
+  }
+  
+  .navbar-brand {
+    /* Add any specific styling for your brand */
+  }
+  
+  .navbar-nav {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .nav-item {
+    margin-right: 15px; /* Adjust the spacing between nav items */
+  }
+  
+  /* Add any additional styling as needed */
+  
   
   .suggestions {
     position: absolute;
-    top: 100%;
+    top: 100%; /* Position suggestions below the input */
     left: 0;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
+    width: 100%; /* Make the suggestions span the full width of the container */
+    background-color: white; /* Set a background color */
+    border: 1px solid #ccc; /* Add a border for visibility */
+    max-height: 150px; /* Limit the maximum height of the suggestions */
+    overflow-y: auto; /* Add a scrollbar if the suggestions exceed the maximum height */
   }
   
   .suggestions div {
@@ -21,6 +54,6 @@
   }
   
   .suggestions div:hover {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; /* Highlight the suggestion on hover */
   }
   
