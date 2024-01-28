@@ -4,7 +4,7 @@ import SearchBar from "./searchbar";
 
 const Navbar = () => {
   return (
-    <div style={{padding:"2% 2% 2% 4% ", border:"1px solid black"}}>
+    <div style={{padding:"2% 2% 2% 4% "}}>
       <nav className="navbar navbar-expand-lg navbar-light">
       <div className="navbar-brand">AutosEscondite</div>
 
@@ -24,22 +24,22 @@ const Navbar = () => {
             <SearchBar />
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/signin">
+                <Link className="nav-link" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
                   About
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/signin">
-                  Contact
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signin">
+                <Link className="nav-link" to="/">
                   Cars
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/signin">
+                <Link className="nav-link" to="/">
                   FAQs
                 </Link>
               </li>

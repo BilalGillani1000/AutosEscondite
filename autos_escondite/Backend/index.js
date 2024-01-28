@@ -41,11 +41,18 @@ const carSchema=new mongoose.Schema({
     comments:{ type:[String],default: [] }
   }
 });
+const eventSchema=new mongoose.Schema({
+  title: { type: String, required: true },
+  info: { type: String, required: true },
+  imageUrl: { type: String, required: true },
+  url: { type: String, required: true }
+});
 
 const User=mongoose.model("User", userSchema);
 const Admin=mongoose.model("Admin", adminSchema);
 const Royal=mongoose.model("royal", royalSchema);
 const Car=mongoose.model("Car", carSchema);
+const Event=mongoose.model("Event", eventSchema);
 
 
 // Set up multer for handling file uploads
@@ -63,15 +70,50 @@ const upload = multer({ storage: storage });
 // Serve static files from the 'uploads' directory
 // app.use('../Frontend/src/content/images', express.static('images'));
 
+app.get("/featuredCars", async(req, res) => {
+  try {
+    const featuredCars=await Car.find({featured: true});
+    if(featuredCars){
+      res.json({featuredCars: featuredCars});
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({featuredCars: "Server Side Error"});
+  }
+});
+app.get("/events", async(req, res) => {
+  try {
+    const Events=await Event.find();
+    if(Events){
+      res.json({events: Events});
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({events: "Server Side Error"});
+  }
+});
+app.get("/cars/:carId", async(req, res) => {
+  const carId=req.params.carId;
+  console.log(carId);
+  try {
+    const carDetails=await Car.findOne({_id: carId});
+    if(carDetails){
+      res.json({carDetails: carDetails});
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({events: "Server Side Error"});
+  }
+});
 // API endpoint for uploading an image
 app.post('/upload', upload.single('image'), (req, res) => {
   try {
-    const imageUrl = `../content/images/${req.file.filename}`; // Save the image URL
+    const imageUrl = `content/images/${req.file.filename}`; // Save the image URL
 
     res.status(200).json({ imageUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Server Side Error' });
   }
 });
 app.post("/user/newsignup", async (req,res) => {
@@ -180,6 +222,72 @@ app.post("/admin/uploadcar", async (req,res) => {
     res.json({message: "Server Side Error"});
   }
 });
+app.post("/admin/uploadevent", async (req,res) => {
+  try {
+    const eventData=req.body;
+    console.log(eventData);
+    const newEvent=new Event(eventData);
+    await newEvent.save();
+    res.json({message: "Event Uploaded Successfully"});
+  } catch (error) {
+    console.error("Error", error);
+    res.json({message: "Server Side Error"});
+  }
+});
+app.post("/newreview/:carId", async (req,res) => {
+  const carId=req.params.carId;
+  console.log(carId);
+  try {
+    const reviewData=req.body;
+    const carDetails=await Car.findOne({_id: carId});
+    console.log(carDetails);
+    if(carDetails){
+      const oldRating=carDetails.reviews.rating;
+      console.log(oldRating);
+      if(oldRating == 0){
+        await Car.updateOne(
+          { _id: carId },
+          {
+            $set: {
+              'reviews.rating': reviewData.rating,
+            },
+            $inc: {
+              'reviews.number': 1,
+            },
+            $push: {
+              'reviews.comments': reviewData.comment,
+            },
+          }
+        );
+        res.json({message: "Review Submitted"});
+      }else {
+        let total=carDetails.reviews.number;
+        console.log(total);
+        const newrat = (oldRating * (total - 1) + reviewData.rating) / total;
+        console.log(newrat);
+        await Car.updateOne(
+          { _id: carId },
+          {
+            $set: {
+              'reviews.rating': newrat,
+            },
+            $inc: {
+              'reviews.number': 1,
+            },
+            $push: {
+              'reviews.comments': reviewData.comment,
+            },
+          }
+        );
+        res.json({message: "Review Submitted"});
+      }
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({events: "Server Side Error"});
+  }
+});
+
 
 
 const PORT = process.env.PORT || 4000;

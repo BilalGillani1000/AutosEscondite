@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import img from "../content/images/download.jpeg";
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 import axios from "axios";
 
 const AdminSignIn = () => {
@@ -29,6 +31,8 @@ const AdminSignIn = () => {
     }
   };
   return (
+    <div>
+    <Navbar />
     <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'cover', minHeight: '100vh'}}>
       <Row className="justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
         <Col md={6}>
@@ -50,6 +54,8 @@ const AdminSignIn = () => {
         </Col>
       </Row>
     </Container>
+    <Footer />
+    </div>
   );
 };
 

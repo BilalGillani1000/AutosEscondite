@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import Navbar from './navbar';
+import Footer from './footer';
 import axios from "axios";
 
 const UploadCar = () => {
@@ -74,6 +76,8 @@ const UploadCar = () => {
   };
 
   return (
+    <div>
+    <Navbar />
     <Container className="mt-5">
           <Form onSubmit={handleSubmit}>
       <Row className="justify-content-center">
@@ -145,6 +149,8 @@ const UploadCar = () => {
       </Row>
       </Form>
     </Container>
+    <Footer />
+    </div>
   );
 };
 

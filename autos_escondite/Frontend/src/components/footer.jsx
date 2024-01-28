@@ -4,9 +4,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from "react-router-dom";
 import {MDBFooter, MDBContainer, MDBCol, MDBRow, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
+import "../styles/styles.css";
 
 const Footer=()=>{
     return(
+        <div>
         <MDBFooter className='bg-dark text-center text-white'>
       <MDBContainer className='p-4 pb-0'>
       <Row id="footer">
@@ -79,14 +81,7 @@ const Footer=()=>{
         </a>
       </div>
     </MDBFooter>
+    </div>
     );
 }
 export default Footer;
-
-// function AutoLayoutExample() {
-//   return (
-    
-//   );
-// }
-
-// export default AutoLayoutExample;

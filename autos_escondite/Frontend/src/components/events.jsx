@@ -1,17 +1,24 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Container, Row, Col, Card } from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 function Event(props) {
   return (
-        <div class="card flex-row"><img class="card-img-left example-card-img-responsive" src={require("../content/images/download.jpeg")}/>
-          <div class="card-body">
-            <h4 class="card-title h5 h4-sm">{props.bold}</h4>
-            <p class="card-text">{props.news}</p>
-          </div>
-        </div>
+    <Row>
+    <Col md={12}>
+      <Card className="flex-row">
+        <Link to={props.url} style={{width:"30%", height:"180px"}}><Card.Img
+          className="card-img-left example-card-img-responsive"
+          src={require(`../${props.image}`)}
+        /></Link>
+        <Card.Body style={{width:"70%", height:"180px"}}>
+          <Card.Title as="h4">{props.bold}</Card.Title>
+          <Card.Text>{props.news.substring(0,400)}...{" "}<Link to={props.url}>Read more</Link></Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  </Row>
   );
-}
+};
 
 export default Event;

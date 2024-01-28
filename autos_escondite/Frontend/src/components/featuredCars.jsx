@@ -1,20 +1,21 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import img from "../content/images/download.jpeg";
+import { Link } from "react-router-dom";
+// import img from "../content/images/download.jpeg";
 
 
 const FeaturedCars=(props)=>{
     return(
-      <Card>
-      <Card.Img variant="botttom" src={img} />
+      <Card style={{ width: '18rem', margin: '10px' }}>
+      <Card.Img style={{height:"11em"}} variant="botttom" src={require(`../${props.image}`)} />
       <Card.Body>
-        <Card.Title>{props.brand}</Card.Title>
+        <Card.Title>{props.make}{" "}{props.model}</Card.Title>
         <Card.Text>
           Starting from
           <h4>Rs {props.price}</h4>
         </Card.Text>
-        <a href="#">Explore</a>
+        <Link to={`/cars/${props.id}`}>Explore</Link>
       </Card.Body>
     </Card>
     );
