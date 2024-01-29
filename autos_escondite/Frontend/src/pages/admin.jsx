@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import Navbar from "../components/navbar";
 import { Button } from "react-bootstrap";
 import Footer from "../components/footer";
+import { Link } from "react-router-dom";
 
 const AdminPage=() => {
     return(
@@ -13,22 +14,22 @@ const AdminPage=() => {
             <Row className="justify-content-center">
             <Col md={2}>
             <Button variant="primary" type="submit" block>
-              Sign In
+              <Link className="text-white" to="/admin/signin">Sign In</Link>
             </Button>
             </Col>
             <Col md={2}>
             <Button variant="primary" type="submit" block>
-              SignUp
+            <Link className="text-white" to="/admin/signup">Sign Up</Link>
             </Button>
             </Col>
             <Col md={2}>
             <Button variant="primary" type="submit" block>
-              Add New Car
+            <Link className="text-white" to="/admin/uploadcar">Add a Car</Link>
             </Button>
             </Col>
             <Col md={2}>
             <Button variant="primary" type="submit" block>
-              Add New Event
+            <Link className="text-white" to="/admin/uploadevent">Add an Event</Link>
             </Button>
             </Col>
             </Row>

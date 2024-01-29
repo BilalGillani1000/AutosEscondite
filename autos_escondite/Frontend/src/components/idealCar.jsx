@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 // Sample car brand and model arrays
-const carBrands = ["Toyota", "Tesla", "Ford", "Chevrolet", "Honda", "Hyundai", "Nissan", "BMW", "Mercedes-Benz"];
-const carModels = ["Camry", "Model S", "Mustang", "Camaro", "Civic", "Elantra", "Altima", "X5", "C-Class"];
+// const carBrands = ["Toyota", "Tesla", "Ford", "Chevrolet", "Honda", "Hyundai", "Nissan", "BMW", "Mercedes-Benz"];
+// const carModels = ["Camry", "Model S", "Mustang", "Camaro", "Civic", "Elantra", "Altima", "X5", "C-Class"];
 
 class TrieNode {
   constructor() {
@@ -57,76 +59,107 @@ class Trie {
 }
 
 const IdealCar = () => {
-  const [brandInput, setBrandInput] = useState('');
-  const [modelInput, setModelInput] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
-  const [brandSuggestions, setBrandSuggestions] = useState([]);
+  
+  const navigate=useNavigate();
+
+  const [make, setMake] = useState('');
+  const [model, setModel] = useState('');
+  const [year, setYear] = useState(0);
+  const [makes, setMakes] = useState([]);
+  const [models, setModels] = useState([]);
+  const [makeSuggestions, setMakeSuggestions] = useState([]);
   const [modelSuggestions, setModelSuggestions] = useState([]);
-  const brandTrie = new Trie();
-  const modelTrie = new Trie();
+  const makesTrie = new Trie();
+  const modelsTrie = new Trie();
+
+
+  useEffect(() => {
+    axios.get('http://localhost:4000/makers-and-models')
+      .then(response => {
+        const { makes, models } = response.data;
+        setMakes(makes);
+        setModels(models);
+      })
+      .catch(error => {
+        console.error('Error fetching makes and models:', error);
+      });
+  }, []);
+  useEffect(() => {
+    // Insert car brands into the Trie only if cars is not null
+    if (makes && models) {
+      makes.forEach((make) => makesTrie.insert(make.toLowerCase()));
+      models.forEach((model) => modelsTrie.insert(model.toLowerCase()));
+    }
+  }, [makes, models, makesTrie, modelsTrie]);
 
   // Insert car brands and models into the Trie
-  carBrands.forEach((brand) => brandTrie.insert(brand.toLowerCase()));
-  carModels.forEach((model) => modelTrie.insert(model.toLowerCase()));
+  
 
   const handleBrandChange = (e) => {
     const userInput = e.target.value.toLowerCase();
-    setBrandInput(userInput);
+    setMake(userInput);
 
     // Search Trie for brand suggestions
-    const prefixNode = brandTrie.searchPrefix(userInput);
-    const suggestions = prefixNode ? brandTrie.getAllSuggestions(prefixNode, userInput) : [];
-    setBrandSuggestions(suggestions);
+    const prefixNode = makesTrie.searchPrefix(userInput);
+    const suggestions = prefixNode ? makesTrie.getAllSuggestions(prefixNode, userInput) : [];
+    setMakeSuggestions(suggestions);
   };
 
   const handleModelChange = (e) => {
     const userInput = e.target.value.toLowerCase();
-    setModelInput(userInput);
+    setModel(userInput);
 
     // Search Trie for model suggestions
-    const prefixNode = modelTrie.searchPrefix(userInput);
-    const suggestions = prefixNode ? modelTrie.getAllSuggestions(prefixNode, userInput) : [];
+    const prefixNode = modelsTrie.searchPrefix(userInput);
+    const suggestions = prefixNode ? modelsTrie.getAllSuggestions(prefixNode, userInput) : [];
     setModelSuggestions(suggestions);
   };
 
   const handleBrandSuggestionClick = (suggestion) => {
-    setBrandInput(suggestion);
-    setBrandSuggestions([]);
+    setMake(suggestion);
+    setMakeSuggestions([]);
   };
 
   const handleModelSuggestionClick = (suggestion) => {
-    setModelInput(suggestion);
+    setModel(suggestion);
     setModelSuggestions([]);
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Process the form submission or update state as needed
-    console.log('Selected Car Brand:', brandInput);
-    console.log('Selected Car Model:', modelInput);
-    console.log("Selected Year:", selectedYear);
+    try {
+      const idealQuery={
+        make: make,
+        model: model,
+        year: year
+      };
+      const response=await axios.post("http://localhost:4000/idealCar", idealQuery);
+      if (response) {
+        navigate(`/cars/${response.data.carId}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
-    <Container className="mt-5 mb-5">
+    <Container style={{padding: "7% 0"}}>
       <Form onSubmit={handleSubmit}>
         <Row className="justify-content-center">
-          <h2 className="text-center">Search for Your Ideal Car</h2>
+          <h2 className="text-center mb-5">Search for Your Ideal Car</h2>
           <Col md={"3"}>
             <Form.Group controlId="carBrand">
               <Form.Label>Car Brand</Form.Label>
               <Form.Control
                 type="text"
-                value={brandInput}
+                value={make}
                 onChange={handleBrandChange}
                 placeholder="Enter a car brand..."
                 autoComplete="off"
               />
               <div className="suggestions-container">
-                {brandSuggestions.length > 0 && (
+                {makeSuggestions.length > 0 && (
                   <div className="suggestions">
-                    {brandSuggestions.map((suggestion, index) => (
+                    {makeSuggestions.map((suggestion, index) => (
                       <div key={index} onClick={() => handleBrandSuggestionClick(suggestion)}>
                         {suggestion}
                       </div>
@@ -141,7 +174,7 @@ const IdealCar = () => {
               <Form.Label>Car Model</Form.Label>
               <Form.Control
                 type="text"
-                value={modelInput}
+                value={model}
                 onChange={handleModelChange}
                 placeholder="Enter a car model..."
                 autoComplete="off"
@@ -162,7 +195,7 @@ const IdealCar = () => {
           <Col md={"3"}>
             <Form.Group controlId="carSeats">
               <Form.Label>Year</Form.Label>
-              <Form.Control type="number" value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} placeholder="Manufacturing year" />
+              <Form.Control type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="Manufacturing year" />
             </Form.Group>
           </Col>
           <Col md={"1"}>
@@ -171,7 +204,6 @@ const IdealCar = () => {
             </Button>
           </Col>
         </Row>
-        
       </Form>
     </Container>
   );

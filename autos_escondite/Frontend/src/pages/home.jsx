@@ -5,11 +5,8 @@ import IdealCar from "../components/idealCar";
 import FeaturedCars from "../components/featuredCars";
 import Event from "../components/events";
 import Footer from "../components/footer";
-// import * as React from 'react';
-// import Grid from '@mui/material/Grid';
-// import Box from '@mui/material/Box';
 import { Container, Row, Col } from "react-bootstrap";
-import { Carousel, Card } from 'react-bootstrap';
+import { Carousel} from 'react-bootstrap';
 import axios from 'axios';
 // import img from "../content/images/download.jpeg";
 
@@ -45,17 +42,17 @@ const Home=()=>{
         <div>
             <Navbar />
             <HeroSection />
-            <div>
+            <div className='lightgray'>
                 <IdealCar />
             </div>
-            <div className='text-center'>
+            <div className='text-center whitesection' style={{padding: "4% 0"}}>
             <h2>Featured New Cars</h2>
             <Carousel indicators={false} className='carousel-dark'>
                 {featuredChunks.map((chunk, index) => (
                 <Carousel.Item key={index}>
                             <div className="d-flex justify-content-around" style={{padding:"4% 6%", paddingBottom:""}}>
                         {chunk.map(car => (
-                            <FeaturedCars key={index} id={car._id} image={car.url} make={car.make} model={car.model} price={car.price}/>
+                            <FeaturedCars key={car.model} id={car._id} image={car.url} make={car.make} model={car.model} price={car.price}/>
             ))}
           </div>
         </Carousel.Item>
@@ -63,9 +60,9 @@ const Home=()=>{
         </Carousel>
         </div>
 
-        <Container style={{ width: '80%', height: '700px', padding:"7% 0"}}>
-        <h3 className="text-center">News & Events</h3>
-            <Row style={{ height: '100%', border: '1px solid #ccc' }}>
+        <Container className='' style={{ width: '80%', height: '700px', padding:"7% 0"}}>
+        <h3 className="text-center mb-5">News & Events</h3>
+            <Row className='pt-2 pb-2' style={{ height: '100%', border: '1px solid #808080', borderRadius:"5px" }}>
                 <Col style={{ overflowY: 'scroll', height: '100%' }}>
                 {events.map((event,index) => (
                 <Event key={index} bold={event.title} news={event.info} url={event.url} image={event.imageUrl}/>

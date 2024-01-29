@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import img from "../content/images/download.jpeg";
+import img from "../content/images/form.jpg";
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
@@ -43,10 +43,10 @@ const AdminSignUp = () => {
   return (
     <div>
     <Navbar />
-    <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'cover', minHeight: '100vh'}}>
-      <Row className="justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+    <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'contain', maxHeight: '500px'}}>
+      <Row className="justify-content-center" style={{ minHeight: '100vh' }}>
         <Col md={6}>
-        <Form onSubmit={handleSignup}>
+        <Form onSubmit={handleSignup} className='text-white mt-2'>
             <h3 className="text-center mb-4">Sign Up as Admin</h3>
             <Form.Group>
               <Form.Label>Full Name</Form.Label>

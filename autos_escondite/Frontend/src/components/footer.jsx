@@ -1,35 +1,35 @@
 import React from "react";
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {MDBFooter, MDBContainer, MDBCol, MDBRow, MDBIcon, MDBBtn } from 'mdb-react-ui-kit';
 import "../styles/styles.css";
 
 const Footer=()=>{
     return(
-        <div>
+        <div className="bg-dark" style={{paddingTop:"2%"}}>
         <MDBFooter className='bg-dark text-center text-white'>
       <MDBContainer className='p-4 pb-0'>
       <Row id="footer">
         <Col>
-            <h3>AutosEscondite</h3>
-            <p>Jinnah Company, Rawalpindi, Punjab, Pakistan</p>
+            <Image src={require("../content/images/logo.jpg")} style={{width:"75%", borderRadius:"8px"}} className="mt-3"/>
+            <p className="mt-4">Jinnah Company, Rawalpindi, Punjab, Pakistan</p>
         </Col>
         <Col>
-            <h5>Vehicles</h5>
+            <h4>Vehicles</h4>
             <div>
-            <Link to="/cars/sedans">Sedans</Link>
+            <Link to="/cars/category/sedan">Sedans</Link>
             </div>
             <div>
-            <Link to="/cars/sedans">SUVs</Link>
+            <Link to="/cars/category/suv">SUVs</Link>
             </div>
             <div>
-            <Link to="/cars/sedans">Pickups</Link>
+            <Link to="/cars/category/pickup">Pickups</Link>
             </div>
         </Col>
         <Col>
-        <h5>QuickLinks</h5>
+        <h4>QuickLinks</h4>
             <div>
             <Link to="/">Privacy Policy</Link>
             </div>
@@ -41,7 +41,7 @@ const Footer=()=>{
             </div>
         </Col>
         <Col>
-            <h5>Contact</h5>
+            <h4>Contact</h4>
             <p>autosescondite@gmail.com</p>
             <p>+92-321-1234567 Punjab, Pakistan</p>
         </Col>

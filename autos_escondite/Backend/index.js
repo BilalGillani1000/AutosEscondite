@@ -81,6 +81,73 @@ app.get("/featuredCars", async(req, res) => {
     res.json({featuredCars: "Server Side Error"});
   }
 });
+app.get("/carnames", async(req, res) => {
+  const names=[];
+  try {
+    const names1=await Car.distinct("make");
+    const names2=await Car.distinct("model");
+    await Promise.all([names1, names2])
+          .then(([names1, names2]) => {
+            names1.forEach(element => {
+              names.push(element);
+            });
+            names2.forEach(element => {
+              names.push(element);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching names:', error);
+            return res.json({names: null});
+          });
+          console.log(names);
+          res.json({names: names});
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({names: null});
+  }
+});
+app.get("/makers-and-models", async(req, res) => {
+  try {
+    const makes=await Car.distinct("make");
+    const models=await Car.distinct("model");
+
+    console.log(makes+" "+models);
+    res.json({makes: makes, models: models});
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({makes: null, models: null});
+  }
+});
+
+app.post("/checkInput", async (req, res) => {
+  try {
+    const input = req.body.input;
+
+    // Check if the input matches any 'model' in the collection
+    const carWithModel = await Car.findOne({ model: { $regex: input, $options: "i" } });
+
+    if (carWithModel) {
+      // Input is a 'model'
+      res.json({ type: 'model', carId: carWithModel._id });
+    } else {
+      // Check if the input matches any 'make' in the collection
+      const carsWithMake = await Car.find({ make: { $regex: input, $options: "i" } });
+
+      if (carsWithMake.length > 0) {
+        // Input is a 'make', but we found multiple cars with the same 'make'
+        res.json({ type: 'make', carIds: carsWithMake.map(car => car._id) });
+      } else {
+        // Input doesn't match any 'make' or 'model'
+        res.json({ type: 'unknown', carId: null });
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 app.get("/events", async(req, res) => {
   try {
     const Events=await Event.find();
@@ -99,12 +166,42 @@ app.get("/cars/:carId", async(req, res) => {
     const carDetails=await Car.findOne({_id: carId});
     if(carDetails){
       res.json({carDetails: carDetails});
+    }else {
+      res.json({carDetails: null});
     }
   } catch (error) {
     console.error("Error: ", error);
     res.json({events: "Server Side Error"});
   }
 });
+app.get("/cars/category/:category", async(req, res) => {
+  const category=req.params.category;
+  console.log(category);
+  try {
+    if (category !== "popular") {
+      const cars = await Car.find({
+        $or: [
+          { type: { $regex: category, $options: "i" } },
+          { make: { $regex: category, $options: "i" } },
+        ]
+      });
+      if(cars){
+        res.json({cars: cars});
+      }
+    } else {
+      const cars=await Car.find({year: {$gte: 2023}});
+      if(cars){
+        res.json({cars: cars});
+      }else {
+        res.json({cars: null});
+      }
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+    res.json({events: "Server Side Error"});
+  }
+});
+
 // API endpoint for uploading an image
 app.post('/upload', upload.single('image'), (req, res) => {
   try {
@@ -116,6 +213,25 @@ app.post('/upload', upload.single('image'), (req, res) => {
     res.status(500).json({ error: 'Server Side Error' });
   }
 });
+app.post("/idealCar", async (req,res) => {
+  try {
+    const searchQuery=req.body;
+    const car = await Car.findOne({
+      make: { $regex: searchQuery.make, $options: 'i' },
+      model: { $regex: searchQuery.model, $options: 'i' },
+      year: searchQuery.year
+    });
+    if (car) {
+      res.json({carId: car._id});
+    } else {
+      res.json({model: null});
+    }
+  } catch (error) {
+    console.error("Error", error);
+    res.json({message:"Server Side Error"});
+  }
+});
+
 app.post("/user/newsignup", async (req,res) => {
   try {
     const userData=req.body;

@@ -9,8 +9,8 @@ import AdminSignUp from "./pages/adminSignup";
 import UploadCar from "./components/uploadCar";
 import UploadEvent from "./components/uploadEvent";
 import ShowCar from "./pages/showCar";
+import ListCars from "./pages/listCars";
 import Test from "./pages/test";
-import ImageUpload from "./pages/uploadImage";
 
 const App=()=>{
     return(
@@ -25,8 +25,8 @@ const App=()=>{
           <Route path="/admin/uploadcar" element={<UploadCar />} />
           <Route path="/admin/uploadevent" element={<UploadEvent />} />
           <Route path="/cars/:carId" element={<ShowCar />} />
+          <Route path="/cars/category/:category" element={<ListCars />} />
           <Route path="/test" element={<Test />} />
-          <Route exact path="/admin/imageUpload" element={<ImageUpload />} />
       </Routes>
     </BrowserRouter>
     );

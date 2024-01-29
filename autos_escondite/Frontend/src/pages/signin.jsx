@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import img from "../content/images/download.jpeg";
+import img from "../content/images/form.jpg"
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from '../contexts/AuthContext';
 
 const SignIn = () => {
+  const { dispatch } = useAuth();
   const navigate=useNavigate();
 
   const [email, setEmail] = useState('');
@@ -23,6 +27,9 @@ const SignIn = () => {
       }else if(response.data.message === "ip") {
         alert("Incorrect Password");
       }else if(response.data.message === "verified"){
+        const user = { username: 'example' };
+        dispatch({ type: 'LOGIN', payload: { user } });
+
         navigate("/");
       }
     } catch (error) {
@@ -30,27 +37,31 @@ const SignIn = () => {
     }
   };
   return (
-    <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'cover', minHeight: '100vh'}}>
-      <Row className="justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-        <Col md={6}>
-          <Form onSubmit={handleSignin}>
-            <h3 className="text-center mb-4">Sign In</h3>
-            <Form.Group>
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
-            </Form.Group>
-            <Button variant="primary" type="submit" block>
-              Sign In
-            </Button>
-          </Form>
-          <Link to="/signup">Don't have an account? Sign Up</Link>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+  <Navbar />
+  <Container fluid className="p-0" style={{ backgroundImage: `url(${img})`, backgroundSize: 'contain', maxHeight: '500px' }}>
+    <Row className="justify-content-center" style={{ minHeight: '100vh' }}>
+      <Col md={6}>
+        <Form onSubmit={handleSignin} className='mt-5 text-white'>
+          <h1 className="text-center mb-4">Sign In</h1>
+          <Form.Group>
+            <Form.Label>Email address</Form.Label>
+            <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+          </Form.Group>
+          <Form.Group className='mt-3'>
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+          </Form.Group>
+          <Button className='mt-4' variant="primary" type="submit" block>
+            Sign In
+          </Button>
+        </Form>
+        <Link className='formlink' to="/signup">Don't have an account? Sign Up</Link>
+      </Col>
+    </Row>
+  </Container>
+  <Footer />
+</div>
   );
 };
 

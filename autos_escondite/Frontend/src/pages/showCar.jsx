@@ -60,63 +60,71 @@ const ShowCar = () => {
         <>
           <Navbar />
           <Container className="mt-5">
-            <div>
-              <Row className='justify-content-center'>
-                <Col xs={12} md={6} lg={8} className="mb-4">
-                  <Image style={{ width: "100%" }} src={require(`../${carDetails.url}`)} />
-                </Col>
-                <Col xs={12} md={6} lg={4}>
-                  <h2 className='mt-3'>{carDetails.make} {carDetails.model}</h2>
-                  <p>Type: {carDetails.type}</p>
-                  <p>Number of Seats: {carDetails.seats}</p>
-                  <p>Mileage: {carDetails.mileage} kms per litre</p>
-                  <p>Price: Rs {carDetails.price}</p>
-                  <p>Rating: <Badge bg="info">{rating}</Badge></p>
-                </Col>
-              </Row>
-              <Row>
-                <Col md={7} style={{ margin: "" }}>
-                  <Row style={{ height: '100%', border: '1px solid #ccc' }}>
-                    <Col style={{ overflowY: 'scroll', height: '100%' }}>
-                      {comments && comments.length > 0 ? (
-                        comments.map((comment, index) => (
-                          <div key={index}>
-                            <p>{comment}</p>
+            {carDetails && Object.keys(carDetails).length > 0 ? (
+              <div>
+                <Row className='justify-content-center'>
+                  <Col xs={12} md={6} lg={8} className="mb-4">
+                    <Image style={{ width: "100%", borderRadius:"5px"}} src={require(`../${carDetails.url}`)} />
+                  </Col>
+                  <Col xs={12} md={6} lg={4}>
+                    <h1 className='mt-3 mb-4'>{carDetails.make} {carDetails.model}</h1>
+                    <h5 className='mb-3'>Type: {carDetails.type}</h5>
+                    <h5 className='mb-3'>Manufacturing Year: {carDetails.year}</h5>
+                    <h5 className='mb-3'>Number of Seats: {carDetails.seats}</h5>
+                    <h5 className='mb-3'>Mileage: {carDetails.mileage} kms per litre</h5>
+                    <h5 className='mb-3'>Price: Rs {carDetails.price}</h5>
+                    <h5 className='mb-3'>Rating: <Badge bg="primary">{rating}</Badge></h5>
+                  </Col>
+                </Row>
+                <Row className='mb-5'>
+                  <Col md={7} style={{ marginRight: "50px" }}>
+                    <Row style={{ height: '100%', border: '1px solid #ccc', borderRadius:"6px" }}>
+                    <h3>Reviews</h3>
+                      <Col style={{ overflowY: 'scroll', height: '100%' }}>
+                        {comments && comments.length > 0 ? (
+                          comments.map((comment, index) => (
+                            <div key={index} style={{borderRadius:"3px", backgroundColor:'rgb(242,242,242)'}}>
+                              <p className='m-1'>{comment}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div>
+                            <h5 className='text-center'>No Reviews Yet</h5>
                           </div>
-                        ))
-                      ) : (
-                        <div>
-                          <h3>No Reviews Yet</h3>
-                        </div>
-                      )}
-                    </Col>
-                  </Row>
-                </Col>
-                <Col md={4} className=''>
-                  <Form onSubmit={handleSubmit}>
-                    <Form.Control as="select" value={newRating} onChange={(e) => setNewRating(e.target.value)}>
-                      <option value={0}>Select Rating</option>
-                      <option value={1}>1</option>
-                      <option value={2}>2</option>
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5</option>
-                    </Form.Control>
-                    <Form.Group>
-                      <Form.Control type="text" as="textarea" rows={5} value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Make a review" />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" block>
-                      Submit
-                    </Button>
-                  </Form>
-                </Col>
-              </Row>
-            </div>
+                        )}
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col md={4} className=''>
+                    <Form onSubmit={handleSubmit}>
+                    <h3 className='text-center'>Make a Review</h3>
+                    <Form.Label>Rating</Form.Label>
+                      <Form.Control as="select" value={newRating} onChange={(e) => setNewRating(e.target.value)}>
+                        <option value={0}>Select Rating</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                      </Form.Control>
+                      <Form.Group className='mt-3'>
+                        <Form.Control type="text" as="textarea" rows={5} value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Leave a comment..." />
+                      </Form.Group>
+                      <Button className='mt-3' variant="primary" type="submit" block>
+                        Submit
+                      </Button>
+                    </Form>
+                  </Col>
+                </Row>
+              </div>
+            ) : (
+              <p className='text-center'>No Results Found</p>
+            )}
           </Container>
           <Footer />
         </>
       ) : (
-        <p>Error fetching car details.</p>
+        <p className='text-center'>No Results Found</p>
       )}
     </div>
   );
