@@ -6,10 +6,8 @@ import Footer from '../components/footer';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from '../contexts/AuthContext';
 
 const SignIn = () => {
-  const { dispatch } = useAuth();
   const navigate=useNavigate();
 
   const [email, setEmail] = useState('');
@@ -28,8 +26,6 @@ const SignIn = () => {
         alert("Incorrect Password");
       }else if(response.data.message === "verified"){
         const user = { username: 'example' };
-        dispatch({ type: 'LOGIN', payload: { user } });
-
         navigate("/");
       }
     } catch (error) {

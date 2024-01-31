@@ -10,7 +10,6 @@ import UploadCar from "./components/uploadCar";
 import UploadEvent from "./components/uploadEvent";
 import ShowCar from "./pages/showCar";
 import ListCars from "./pages/listCars";
-import Test from "./pages/test";
 
 const App=()=>{
     return(
@@ -26,7 +25,6 @@ const App=()=>{
           <Route path="/admin/uploadevent" element={<UploadEvent />} />
           <Route path="/cars/:carId" element={<ShowCar />} />
           <Route path="/cars/category/:category" element={<ListCars />} />
-          <Route path="/test" element={<Test />} />
       </Routes>
     </BrowserRouter>
     );
