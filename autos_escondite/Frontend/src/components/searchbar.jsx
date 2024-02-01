@@ -77,7 +77,7 @@ const SearchBar = () => {
           try {
             const response = await axios.get("http://localhost:4000/carnames");
             if(response.data.names){
-              console.log(response.data.names);
+              // console.log(response.data.names);
               setCars(response.data.names);
             }else{
               console.log("No Names Retrieved");
@@ -134,6 +134,7 @@ const SearchBar = () => {
   return (
     <Form onSubmit={handleSubmit} className=" d-flex position-relative" style={{width:"70%",marginLeft:"130px"}}>
       <Form.Control
+        required
         className=""
         type="text"
         value={input}

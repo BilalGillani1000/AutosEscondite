@@ -23,14 +23,15 @@ const UploadCar = () => {
     const token = localStorage.getItem("token");
     if (token) {
       const user = decodeToken(token);
-      if (!user) {
-        localStorage.removeItem("token");
+      if (!user || user.role !== "admin") {
+        // localStorage.removeItem("token");
         navigate("/admin/signin");
       }
     } else {
       navigate("/admin/signin");
     }
   }, []);
+  
 
 
   const handleImageChange = (event) => {
@@ -67,13 +68,14 @@ const UploadCar = () => {
   };
   useEffect(() => {
     if (imagePath) {
+      alert("Image Uploaded Successfully");
       console.log('Image uploaded with url:', imagePath);
     }
   }, [imagePath]);
   
   const signout=() => {
     localStorage.removeItem("token");
-    navigate("/admin/signin");
+    window.location.href = "/admin/signin";
   };
   const handleSubmit =async (e) => {
     e.preventDefault();
@@ -90,6 +92,7 @@ const UploadCar = () => {
         url: imagePath
       };
       const response=await axios.post("http://localhost:4000/admin/uploadcar", carData);
+      window.location.href = "/admin/uploadcar";
       alert(response.data.message);
   } catch (error) {
     console.error("Error:", error);
@@ -99,25 +102,25 @@ const UploadCar = () => {
   return (
     <div>
     <Navbar name="Sign out" path="/admin/signin" onclick={signout}/>
-    <Container className="mt-5">
+    <Container className="mt-4" style={{minHeight:"450px"}}>
           <Form onSubmit={handleSubmit}>
       <Row className="justify-content-center">
       <h1 style={{textAlign:"center"}}>Add a New Car</h1>
         <Col md={"3"} style={{margin:"0 2%"}}>
           <Form.Group>
               <Form.Label>Make</Form.Label>
-              <Form.Control type="text" value={make} onChange={(e) => setMake(e.target.value)} placeholder="Enter car model" />
+              <Form.Control type="text" required value={make} onChange={(e) => setMake(e.target.value)} placeholder="Enter car model" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Model</Form.Label>
-              <Form.Control type="text" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Enter car model" />
+              <Form.Control type="text" required value={model} onChange={(e) => setModel(e.target.value)} placeholder="Enter car model" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Vehicle Type</Form.Label>
-              <Form.Control as="select" value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="">Select Vehicle Type</option>
+              <Form.Control as="select" required value={type} onChange={(e) => setType(e.target.value)}>
+                <option value={null}>Select Vehicle Type</option>
                 <option>Sedan</option>
                 <option>SUV</option>
                 <option>Pickup</option>
@@ -127,8 +130,8 @@ const UploadCar = () => {
 
             <Form.Group>
               <Form.Label>Featured</Form.Label>
-              <Form.Control as="select" value={featured} onChange={(e) => setFeatured(e.target.value)}>
-                <option value="">Select Year</option>
+              <Form.Control as="select" required value={featured} onChange={(e) => setFeatured(e.target.value)}>
+                <option value={null}>Select Year</option>
                 <option>yes</option>
                 <option>no</option>
                 {/* Add more options as needed */}
@@ -138,32 +141,32 @@ const UploadCar = () => {
         <Col md={"3"} style={{margin:"0 2%"}}>
           <Form.Group>
               <Form.Label>Year</Form.Label>
-              <Form.Control type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="Manufacturing year" />
+              <Form.Control type="number" required value={year} onChange={(e) => setYear(e.target.value)} placeholder="Manufacturing year" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Seats</Form.Label>
-              <Form.Control type="number" value={seats} onChange={(e) => setSeats(e.target.value)} placeholder="Number of seats" />
+              <Form.Control type="number" required value={seats} onChange={(e) => setSeats(e.target.value)} placeholder="Number of seats" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Mileage</Form.Label>
-              <Form.Control type="number" value={mileage} onChange={(e) => setMileage(e.target.value)} placeholder="km per litre" />
+              <Form.Control type="number" required value={mileage} onChange={(e) => setMileage(e.target.value)} placeholder="km per litre" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Price</Form.Label>
-              <Form.Control type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="pkr" />
+              <Form.Control type="number" required value={price} onChange={(e) => setPrice(e.target.value)} placeholder="pkr" />
             </Form.Group>
         </Col>
         <Col md={"4"} className="">
           <div style={{padding:"2em 1em"}}>
-            <Form.Control type='file' accept='image/*' onChange={handleImageChange}></Form.Control>
-            <Button onClick={handleUpload}>Upload Image</Button>
+            <Form.Control type='file' required accept='image/*' onChange={handleImageChange}></Form.Control>
+            <Button onClick={handleUpload} className='mt-3 btn-sm'>Upload Image</Button>
           </div>
         </Col>
         <Col md={"2"}>
-          <Button variant="primary" type="submit" block>
+          <Button className='mt-4' variant="primary" type="submit" block>
                 Upload Car
           </Button>
         </Col>

@@ -45,19 +45,19 @@ const SignUp = () => {
             <h3 className="text-center mb-4">Sign Up</h3>
             <Form.Group>
               <Form.Label>Full Name</Form.Label>
-              <Form.Control type="text" value={fullname} placeholder="Enter your full name" onChange={(e) => setFullName(e.target.value)} />
+              <Form.Control type="text" required value={fullname} placeholder="Enter your full name" onChange={(e) => setFullName(e.target.value)} />
             </Form.Group>
             <Form.Group className='mt-2'>
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" value={email} placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+              <Form.Control type="email" required value={email} placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
             </Form.Group>
             <Form.Group className='mt-2'>
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" value={password}placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+              <Form.Control type="password" required value={password}placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
             </Form.Group>
             <Form.Group className='mt-2'>
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" value={repass} placeholder="Confirm your password" onChange={(e) => setRepass(e.target.value)} />
+              <Form.Control type="password" required value={repass} placeholder="Confirm your password" onChange={(e) => setRepass(e.target.value)} />
             </Form.Group>
             <Button className='mt-3' variant="primary" type="submit" block>
               Sign Up

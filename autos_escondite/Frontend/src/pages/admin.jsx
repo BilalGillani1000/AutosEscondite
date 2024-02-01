@@ -12,16 +12,16 @@ const AdminPage=() => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (token) {
-          const user = decodeToken(token);
-          if (!user) {
-            localStorage.removeItem("token");
-            navigate("/admin/signin");
-          }
-        } else {
-          navigate("/admin/signin");
-        }
-      }, []);
+    if (token) {
+      const user = decodeToken(token);
+      if (!user || user.role !== "admin") {
+        localStorage.removeItem("token");
+        navigate("/admin/signin");
+      }
+    } else {
+      navigate("/admin/signin");
+    }
+  }, []);
 
     const signout = () => {
         localStorage.removeItem("token");
@@ -31,7 +31,7 @@ const AdminPage=() => {
     return(
         <div>
         <Navbar name="Sign out" onclick={signout}/>
-        <Container className="mt-5">
+        <Container className="mt-5" >
             <h1 className="text-center mb-5">Welcome to Admin Page</h1>
             <Row className="justify-content-center">
             <Col md={2}>

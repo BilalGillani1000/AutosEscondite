@@ -6,7 +6,7 @@ const Navbar = (props) => {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{padding:"2% 3% 2% 5%"}}>
-      <img src={require("../content/images/logo.jpg")} style={{width:"15%", borderRadius:"8px"}}/>
+      <Link to="/" style={{width:"20%"}}><img src={require("../content/images/logo.jpg")} style={{width:"100%", borderRadius:"8px"}}/></Link>
 
         <button
           className="navbar-toggler"

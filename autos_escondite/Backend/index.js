@@ -269,7 +269,7 @@ app.post("/user/signin", async (req,res) => {
     if(userExisted){
       const verified=await bcrypt.compare(userData.password, userExisted.password);
       if(verified){
-        const token = jwt.sign({ email: userExisted.email }, SECRET);
+        const token = jwt.sign({ role: "user", email: userExisted.email }, SECRET);
         res.json({message: "verified", token: token});
       }else {
         res.json({message: "ip", token: false});
@@ -301,7 +301,7 @@ app.post("/admin/newsignup", async (req,res) => {
         res.json({message: "Signup Successfull"});
         }
       }else {
-        res.json({message: "You can't signup as an admin"});
+        res.json({message: "Sorry, You can't Sign up as an Admin"});
       }
     }else {
     res.json({message:"Server Side Error"});
@@ -318,9 +318,10 @@ app.post("/admin/signin", async (req,res) => {
     if(adminExisted){
       const verified=await bcrypt.compare(adminData.password, adminExisted.password);
       if(verified){
-        res.json({message: "verified"});
+        const token = jwt.sign({ role: "admin" ,email: adminExisted.email }, SECRET);
+        res.json({message: "verified", token: token});
       }else {
-        res.json({message: "ip"});
+        res.json({message: "ip", token: false});
       }
     }else {
       res.json({message: false});
@@ -368,15 +369,23 @@ app.post("/newreview/:carId", async (req,res) => {
     const reviewData=req.body;
     const carDetails=await Car.findOne({_id: carId});
     console.log(carDetails);
-    if(carDetails){
+    
       const oldRating=carDetails.reviews.rating;
-      console.log(oldRating);
-      if(oldRating == 0){
+      const people = carDetails.reviews.number;
+//       console.log(people);
+//       console.log(oldRating);
+//       console.log(reviewData.rating);
+//       console.log((oldRating*people));
+//       console.log(((oldRating*people)+ (+reviewData.rating) ));
+// console.log(((oldRating*people)+reviewData.rating)/(people+1))
+      const newrating =((oldRating*people)+(+reviewData.rating))/(people+1);
+        console.log(newrating);
+
         await Car.updateOne(
           { _id: carId },
           {
             $set: {
-              'reviews.rating': reviewData.rating,
+              'reviews.rating': newrating,
             },
             $inc: {
               'reviews.number': 1,
@@ -387,28 +396,8 @@ app.post("/newreview/:carId", async (req,res) => {
           }
         );
         res.json({message: "Review Submitted"});
-      }else {
-        let total=carDetails.reviews.number;
-        console.log(total);
-        const newrat = (oldRating * (total - 1) + reviewData.rating) / total;
-        console.log(newrat);
-        await Car.updateOne(
-          { _id: carId },
-          {
-            $set: {
-              'reviews.rating': newrat,
-            },
-            $inc: {
-              'reviews.number': 1,
-            },
-            $push: {
-              'reviews.comments': reviewData.comment,
-            },
-          }
-        );
-        res.json({message: "Review Submitted"});
-      }
-    }
+      
+    
   } catch (error) {
     console.error("Error: ", error);
     res.json({events: "Server Side Error"});

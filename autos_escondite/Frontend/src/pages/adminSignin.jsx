@@ -23,7 +23,9 @@ const AdminSignIn = () => {
         alert("Incorrect Username or Password");
       }else if(response.data.message === "ip") {
         alert("Incorrect Password");
-      }else if(response.data.message === "verified"){
+      }else if(response.data.message === "verified" && response.data.token){
+        localStorage.setItem("token", response.data.token);
+        alert("Signin Successfull");
         navigate("/admin");
       }
     } catch (error) {
@@ -41,11 +43,11 @@ const AdminSignIn = () => {
             <h3 className="text-center mb-4">Sign In as Admin</h3>
             <Form.Group>
               <Form.Label>Email address</Form.Label>
-              <Form.Control value={email} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+              <Form.Control value={email} required type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
             </Form.Group>
             <Form.Group className='mt-3'>
               <Form.Label>Password</Form.Label>
-              <Form.Control value={password} type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+              <Form.Control value={password} required type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
             </Form.Group>
             <Button className='mt-3' variant="primary" type="submit" block>
               Sign In

@@ -150,6 +150,7 @@ const IdealCar = () => {
             <Form.Group controlId="carBrand">
               <Form.Label>Car Brand</Form.Label>
               <Form.Control
+                required
                 type="text"
                 value={make}
                 onChange={handleBrandChange}
@@ -173,6 +174,7 @@ const IdealCar = () => {
             <Form.Group controlId="carModel">
               <Form.Label>Car Model</Form.Label>
               <Form.Control
+                required
                 type="text"
                 value={model}
                 onChange={handleModelChange}
@@ -195,7 +197,7 @@ const IdealCar = () => {
           <Col md={"3"}>
             <Form.Group controlId="carSeats">
               <Form.Label>Year</Form.Label>
-              <Form.Control type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="Manufacturing year" />
+              <Form.Control type="number" required value={year} onChange={(e) => setYear(e.target.value)} placeholder="Manufacturing year" />
             </Form.Group>
           </Col>
           <Col md={"1"}>

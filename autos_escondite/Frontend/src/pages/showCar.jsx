@@ -55,7 +55,7 @@ const ShowCar = () => {
 
   const signout=() => {
     localStorage.removeItem("token");
-    navigate("/signin");
+    window.location.href = "/signin";
   };
 
   const handleSubmit = async (e) => {
@@ -68,6 +68,7 @@ const ShowCar = () => {
       console.log(reviewData);
       const response = await axios.post(`http://localhost:4000/newreview/${carId}`, reviewData);
       alert(response.data.message);
+      window.location.reload(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -105,7 +106,7 @@ const ShowCar = () => {
                         {comments && comments.length > 0 ? (
                           comments.map((comment, index) => (
                             <div key={index} style={{borderRadius:"3px", backgroundColor:'rgb(242,242,242)'}}>
-                              <p className='m-1'>{comment}</p>
+                              <p className='m-2 p-1'>{comment}</p>
                             </div>
                           ))
                         ) : (

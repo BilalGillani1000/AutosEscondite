@@ -18,15 +18,15 @@ const UploadEvent = () => {
     const token = localStorage.getItem("token");
     if (token) {
       const user = decodeToken(token);
-      if (!user) {
-        localStorage.removeItem("token");
+      if (!user || user.role !== "admin") {
+        // localStorage.removeItem("token");
         navigate("/admin/signin");
       }
     } else {
       navigate("/admin/signin");
     }
   }, []);
-
+  
   const handleImageChange = (event) => {
     setSelectedImage(event.target.files[0]);
   };
@@ -61,13 +61,14 @@ const UploadEvent = () => {
   };
   useEffect(() => {
     if (imagePath) {
+      alert("Image Uploaded Successfully")
       console.log('Image uploaded with url:', imagePath);
     }
   }, [imagePath]);
 
   const signout=() => {
     localStorage.removeItem("token");
-    navigate("/admin/signin");
+      window.location.href = "/admin/uploadcar";
   };
 
   const handleSubmit =async (e) => {
@@ -80,6 +81,7 @@ const UploadEvent = () => {
         url: url
       };
       const response=await axios.post("http://localhost:4000/admin/uploadevent", eventData);
+      window.location.href = "/admin/uploadevent";
       alert(response.data.message);
   } catch (error) {
     console.error("Error:", error);
@@ -89,33 +91,33 @@ const UploadEvent = () => {
   return (
     <div>
     <Navbar name="Sign out" onclick={signout} />
-    <Container className="mt-5">
+    <Container className="mt-4" style={{minHeight:"450px"}}>
           <Form onSubmit={handleSubmit}>
       <Row className="justify-content-center">
       <h1 style={{textAlign:"center"}}>Add an Event</h1>
         <Col md={"4"} style={{margin:"0 2%"}}>
             <Form.Group>
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event Title" />
+              <Form.Control type="text" required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event Title" />
             </Form.Group>
 
             <Form.Group>
               <Form.Label>Details</Form.Label>
-              <Form.Control type="text" as="textarea" rows={5}  value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Add event details" />
+              <Form.Control type="text" required as="textarea" rows={5}  value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Add event details" />
             </Form.Group>
             <Form.Group>
               <Form.Label>Link</Form.Label>
-              <Form.Control type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Enter event link" />
+              <Form.Control type="text" required value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Enter event link" />
             </Form.Group>
         </Col>
         <Col md={"4"} className="">
           <div style={{padding:"2em 1em"}}>
-            <Form.Control type='file' accept='image/*' onChange={handleImageChange}></Form.Control>
-            <Button onClick={handleUpload}>Upload Image</Button>
+            <Form.Control type='file' required accept='image/*' onChange={handleImageChange}></Form.Control>
+            <Button className='mt-3 btn-sm' onClick={handleUpload}>Upload Image</Button>
           </div>
         </Col>
         <Col md={"4"}>
-          <Button variant="primary" type="submit" block>
+          <Button className='mt-4' variant="primary" type="submit" block>
                 Upload Event
           </Button>
         </Col>

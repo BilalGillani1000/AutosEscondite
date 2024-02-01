@@ -13,7 +13,7 @@ const Footer=()=>{
       <MDBContainer className='p-4 pb-0'>
       <Row id="footer">
         <Col>
-            <Image src={require("../content/images/logo.jpg")} style={{width:"75%", borderRadius:"8px"}} className="mt-3"/>
+            <Link to="/" style={{width:"20%"}}><Image src={require("../content/images/logo.jpg")} style={{width:"85%", borderRadius:"8px"}} className="mt-3"/></Link>
             <p className="mt-4">Jinnah Company, Rawalpindi, Punjab, Pakistan</p>
         </Col>
         <Col>

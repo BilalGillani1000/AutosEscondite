@@ -54,7 +54,7 @@ const Home=()=>{
       };
       const signout=() => {
         localStorage.removeItem("token");
-        navigate("/signin");
+        window.location.href = "/signin";
       };
       
     return(

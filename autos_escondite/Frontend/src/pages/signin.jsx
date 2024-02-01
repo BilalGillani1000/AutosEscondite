@@ -43,11 +43,11 @@ const SignIn = () => {
           <h1 className="text-center mb-4">Sign In</h1>
           <Form.Group>
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
+            <Form.Control type="email" required onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" />
           </Form.Group>
           <Form.Group className='mt-3'>
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
+            <Form.Control type="password" required onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" />
           </Form.Group>
           <Button className='mt-4' variant="primary" type="submit" block>
             Sign In

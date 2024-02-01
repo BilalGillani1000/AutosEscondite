@@ -43,7 +43,7 @@ const ListCars = () => {
   }, [category]);
   const signout=() => {
     localStorage.removeItem("token");
-    navigate("/signin");
+    window.location.href = "/signin";
   };
 
   return (
