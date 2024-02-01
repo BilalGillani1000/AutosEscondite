@@ -3,6 +3,7 @@ import { Form, Button, NavbarOffcanvas } from 'react-bootstrap';
 import axios from 'axios';
 import "../styles/styles.css";
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
 
 class TrieNode {
   constructor() {
@@ -64,37 +65,45 @@ const SearchBar = () => {
   const [cars, setCars] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const trie = new Trie();
+
   useEffect(() => {
-    const fetchCarsNames = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/carnames");
-        if(response.data.names){
-          console.log(response.data.names);
-          setCars(response.data.names);
-        }else{
-          console.log("No Names Retrieved");
-        }
-      } catch (error) {
-        console.error('Error:', error);
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = decodeToken(token);
+      if (!user) {
+        localStorage.removeItem("token");
+      }else {
+        const fetchCarsNames = async () => {
+          try {
+            const response = await axios.get("http://localhost:4000/carnames");
+            if(response.data.names){
+              console.log(response.data.names);
+              setCars(response.data.names);
+            }else{
+              console.log("No Names Retrieved");
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+        fetchCarsNames();
       }
-    };
-    fetchCarsNames();
+    } else {
+    }
   }, []);
+
   useEffect(() => {
-    // Insert car brands into the Trie only if cars is not null
     if (cars) {
       cars.forEach((car) => {
         trie.insert(car.toLowerCase());
       });
     }
   }, [cars, trie]);
-  // Example car brands
-  // const carBrands = ["Toyota", "Tesla", "Ford", "Chevrolet", "Honda", "Hyundai", "Nissan", "BMW", "Mercedes-Benz"];
+
   const handleInputChange = (event) => {
     const userInput = event.target.value.toLowerCase();
     setInput(userInput);
 
-    // Search Trie for suggestions
     const prefixNode = trie.searchPrefix(userInput);
     const suggestions = prefixNode ? trie.getAllSuggestions(prefixNode, userInput) : [];
     setSuggestions(suggestions);

@@ -42,7 +42,7 @@ const AdminSignUp = () => {
 
   return (
     <div>
-    <Navbar />
+    <Navbar name="Sign in" path="/admin/signin" />
     <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'contain', maxHeight: '500px'}}>
       <Row className="justify-content-center" style={{ minHeight: '100vh' }}>
         <Col md={6}>

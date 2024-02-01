@@ -1,14 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+dotenv.config();
 const multer = require('multer');
 const path = require('path');
+const jwt=require("jsonwebtoken");
 const cors = require('cors');
 const mongoose=require("mongoose");
 const bcrypt=require("bcrypt");
+const SECRET=process.env.SECRET;
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/auto_escondite");
 const userSchema=new mongoose.Schema({
@@ -119,33 +125,6 @@ app.get("/makers-and-models", async(req, res) => {
   }
 });
 
-app.post("/checkInput", async (req, res) => {
-  try {
-    const input = req.body.input;
-
-    // Check if the input matches any 'model' in the collection
-    const carWithModel = await Car.findOne({ model: { $regex: input, $options: "i" } });
-
-    if (carWithModel) {
-      // Input is a 'model'
-      res.json({ type: 'model', carId: carWithModel._id });
-    } else {
-      // Check if the input matches any 'make' in the collection
-      const carsWithMake = await Car.find({ make: { $regex: input, $options: "i" } });
-
-      if (carsWithMake.length > 0) {
-        // Input is a 'make', but we found multiple cars with the same 'make'
-        res.json({ type: 'make', carIds: carsWithMake.map(car => car._id) });
-      } else {
-        // Input doesn't match any 'make' or 'model'
-        res.json({ type: 'unknown', carId: null });
-      }
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 
 app.get("/events", async(req, res) => {
@@ -213,6 +192,37 @@ app.post('/upload', upload.single('image'), (req, res) => {
     res.status(500).json({ error: 'Server Side Error' });
   }
 });
+
+// Post requests below...
+
+app.post("/checkInput", async (req, res) => {
+  try {
+    const input = req.body.input;
+
+    // Check if the input matches any 'model' in the collection
+    const carWithModel = await Car.findOne({ model: { $regex: input, $options: "i" } });
+
+    if (carWithModel) {
+      // Input is a 'model'
+      res.json({ type: 'model', carId: carWithModel._id });
+    } else {
+      // Check if the input matches any 'make' in the collection
+      const carsWithMake = await Car.find({ make: { $regex: input, $options: "i" } });
+
+      if (carsWithMake.length > 0) {
+        // Input is a 'make', but we found multiple cars with the same 'make'
+        res.json({ type: 'make', carIds: carsWithMake.map(car => car._id) });
+      } else {
+        // Input doesn't match any 'make' or 'model'
+        res.json({ type: 'unknown', carId: null });
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.post("/idealCar", async (req,res) => {
   try {
     const searchQuery=req.body;
@@ -259,12 +269,13 @@ app.post("/user/signin", async (req,res) => {
     if(userExisted){
       const verified=await bcrypt.compare(userData.password, userExisted.password);
       if(verified){
-        res.json({message: "verified"});
+        const token = jwt.sign({ email: userExisted.email }, SECRET);
+        res.json({message: "verified", token: token});
       }else {
-        res.json({message: "ip"});
+        res.json({message: "ip", token: false});
       }
     }else {
-      res.json({message: false});
+      res.json({message: false, token: false});
     }
   } catch (error) {
     console.error("Error", error);

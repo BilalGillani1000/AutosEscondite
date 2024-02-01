@@ -18,10 +18,6 @@ const SignUp = () => {
     e.preventDefault();
     if (password === repass) {
       try {
-        // console.log(fullname);
-        // console.log(email);
-        // console.log(password);
-        // console.log(repass);
         const userData = {
           username: fullname,
           email: email,
@@ -41,7 +37,7 @@ const SignUp = () => {
 
   return (
     <div>
-    <Navbar />
+    <Navbar name="Sign in" path="/signin"/>
     <Container fluid className="p-0" style={{backgroundImage: `url(${img})`, backgroundSize: 'contain', maxHeight: '500px'}}>
       <Row className="justify-content-center" style={{ minHeight: '100vh' }}>
         <Col md={6}>

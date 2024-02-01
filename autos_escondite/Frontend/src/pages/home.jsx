@@ -8,24 +8,39 @@ import Footer from "../components/footer";
 import { Container, Row, Col } from "react-bootstrap";
 import { Carousel} from 'react-bootstrap';
 import axios from 'axios';
-// import img from "../content/images/download.jpeg";
+import { decodeToken } from "react-jwt";
+import { useNavigate } from 'react-router-dom';
 
 const Home=()=>{
+  const navigate=useNavigate();
     const [featuredCars, setFeaturedCars] = useState([]);
     const [featuredChunks, setFeaturedChunks] = useState([]);
     const [events, setEvents] = useState([]);
     useEffect(() => {
-        const response1=axios.get('http://localhost:4000/featuredCars')
-        const response2=axios.get('http://localhost:4000/events')
-        Promise.all([response1, response2])
-          .then(([response1, response2]) => {
-            setFeaturedCars(response1.data.featuredCars);
-            setEvents(response2.data.events);
-          })
-          .catch(error => {
-            console.error('Error fetching cars and events:', error);
-          });
-      }, []);
+      const token = localStorage.getItem("token");
+      if (token) {
+        const user = decodeToken(token);
+        if (!user) {
+          localStorage.removeItem("token");
+          navigate("/signin");
+        } else {
+          const response1 = axios.get('http://localhost:4000/featuredCars');
+          const response2 = axios.get('http://localhost:4000/events');
+          Promise.all([response1, response2])
+            .then(([response1, response2]) => {
+              setFeaturedCars(response1.data.featuredCars);
+              setEvents(response2.data.events);
+            })
+            .catch(error => {
+              console.error('Error fetching cars and events:', error);
+              navigate("/signin");  // <-- Move this line here
+            });
+        }
+      } else {
+        navigate("/signin");
+      }
+    }, []);
+    
       useEffect(() => {
         // Create chunks when featuredCars state updates
         makeChunks(featuredCars, 3);
@@ -37,10 +52,14 @@ const Home=()=>{
         }
         setFeaturedChunks(chunkss);
       };
+      const signout=() => {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      };
       
     return(
         <div>
-            <Navbar />
+            <Navbar name="Sign out" onclick={signout} />
             <HeroSection />
             <div className='lightgray'>
                 <IdealCar />

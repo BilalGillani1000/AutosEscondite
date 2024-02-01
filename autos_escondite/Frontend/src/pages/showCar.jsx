@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Image, Badge, Form, Button } from 'react-bootstrap';
+import { decodeToken } from "react-jwt";
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import axios from 'axios';
 
 const ShowCar = () => {
+  const navigate=useNavigate();
   const { carId } = useParams();
   const [carDetails, setCarDetails] = useState(null);
   const [comments, setComments] = useState(null);
@@ -13,6 +16,19 @@ const ShowCar = () => {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(1);
   const [newComment, setNewComment] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = decodeToken(token);
+      if (!user) {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      }
+    } else {
+      navigate("/signin");
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -37,6 +53,11 @@ const ShowCar = () => {
     }
   }, [carDetails]);
 
+  const signout=() => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -58,7 +79,7 @@ const ShowCar = () => {
         <p>Loading...</p>
       ) : carDetails ? (
         <>
-          <Navbar />
+        <Navbar name="Sign out" onclick={signout}/>
           <Container className="mt-5">
             {carDetails && Object.keys(carDetails).length > 0 ? (
               <div>

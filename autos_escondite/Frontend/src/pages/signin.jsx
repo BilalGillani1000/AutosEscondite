@@ -24,8 +24,9 @@ const SignIn = () => {
         alert("Incorrect Username or Password");
       }else if(response.data.message === "ip") {
         alert("Incorrect Password");
-      }else if(response.data.message === "verified"){
-        const user = { username: 'example' };
+      }else if(response.data.message === "verified" && response.data.token){
+        localStorage.setItem("token", response.data.token);
+        alert("Signin Successfull");
         navigate("/");
       }
     } catch (error) {

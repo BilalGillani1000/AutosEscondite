@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./searchbar";
 
-const Navbar = () => {
+const Navbar = (props) => {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark" style={{padding:"2% 3% 2% 5%"}}>
@@ -44,8 +44,8 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/signin" style={{minWidth:"70px"}}>
-                  Sign in
+                <Link className="nav-link" to={props.path} style={{minWidth:"80px"}} onClick={props.onclick}>
+                  {props.name}
                 </Link>
               </li>
             </ul>

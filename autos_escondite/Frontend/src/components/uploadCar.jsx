@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { decodeToken } from "react-jwt";
 import Navbar from './navbar';
 import Footer from './footer';
 import axios from "axios";
 
 const UploadCar = () => {
+  const navigate=useNavigate();
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [type, setType] = useState('');
@@ -15,6 +18,20 @@ const UploadCar = () => {
   const [price, setPrice] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePath, setImagePath] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = decodeToken(token);
+      if (!user) {
+        localStorage.removeItem("token");
+        navigate("/admin/signin");
+      }
+    } else {
+      navigate("/admin/signin");
+    }
+  }, []);
+
 
   const handleImageChange = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -53,7 +70,11 @@ const UploadCar = () => {
       console.log('Image uploaded with url:', imagePath);
     }
   }, [imagePath]);
-
+  
+  const signout=() => {
+    localStorage.removeItem("token");
+    navigate("/admin/signin");
+  };
   const handleSubmit =async (e) => {
     e.preventDefault();
     try {
@@ -77,7 +98,7 @@ const UploadCar = () => {
 
   return (
     <div>
-    <Navbar />
+    <Navbar name="Sign out" path="/admin/signin" onclick={signout}/>
     <Container className="mt-5">
           <Form onSubmit={handleSubmit}>
       <Row className="justify-content-center">
